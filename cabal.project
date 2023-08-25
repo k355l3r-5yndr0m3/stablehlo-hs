@@ -1,0 +1,4 @@
+packages: .
+          ../mlir-hs
+          ../mlir-hs-tblgen
+
