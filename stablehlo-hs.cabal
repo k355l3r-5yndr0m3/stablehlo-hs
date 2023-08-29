@@ -120,10 +120,12 @@ library
                       VhloOps
                       VhloTypes
 
-    cxx-sources:      cbits/Dialect/Stablehlo/attribute.cpp
+    cxx-sources:      cbits/Dialect/Stablehlo/attributes.cpp
     
     include-dirs:     /home/cha0s/stablehlo
                       /home/cha0s/stablehlo/build
+                      cpphs/
+                      cbits/
 
     extra-lib-dirs:   /home/cha0s/stablehlo/build/lib
 

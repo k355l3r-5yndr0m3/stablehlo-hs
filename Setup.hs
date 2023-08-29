@@ -18,6 +18,7 @@ userHooks = baseHooks {
     createDirectoryIfMissing True $ dialectOutput </> "Stablehlo"
     hsGenerate [mlirInclude, shloInclude] 
                (shloInclude </> "stablehlo/dialect/StablehloOps.td")
+               "stablehlo-typemap.h"
                "Stablehlo.Dialect.Stablehlo.Ops"
                ["Stablehlo.Dialect.Stablehlo.Attributes"]
                (dialectOutput </> "Stablehlo" </> "Ops" <.> "hs")
@@ -25,17 +26,6 @@ userHooks = baseHooks {
     -- Do the other things
     preBuild baseHooks args buildFlags) }
 
-
-{-
- -
-    createDirectoryIfMissing True $ dialectOutput </> "DL"
-    hsGenerate ["/home/cha0s/mlir-output/include"] 
-               "/home/cha0s/mlir-output/include/mlir/Dialect/DL/IR/DLOps.td"
-               "MLIR.Dialect.DL.Ops"
-               []
-               (dialectOutput </> "DL" </> "Ops" <.> "hs")
- -
- - -}
 
 
 

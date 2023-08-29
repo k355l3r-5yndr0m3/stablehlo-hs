@@ -1,0 +1,15 @@
+#include <typemap.h>
+#define _MaybeComparisonTypeAttr Maybe ComparisonTypeAttr
+#define _MaybeChannelHandleAttr Maybe ChannelHandleAttr
+#define _MaybeCustomCallApiVersionAttr Maybe CustomCallApiVersionAttr
+
+#define _ScatterDimensionNumbersAttr ScatterDimensionNumbersAttr
+#define _ChannelHandleAttr ChannelHandleAttr
+#define _RngDistributionAttr RngDistributionAttr
+#define _RngAlgorithmAttr RngAlgorithmAttr
+#define _GatherDimensionNumbersAttr GatherDimensionNumbersAttr
+#define _FftTypeAttr FftTypeAttr
+#define _ConvDimensionNumbersAttr ConvDimensionNumbersAttr
+#define _TransposeAttr TransposeAttr
+#define _DotDimensionNumbersAttr DotDimensionNumbersAttr
+#define _ComparisonDirectionAttr ComparisonDirectionAttr

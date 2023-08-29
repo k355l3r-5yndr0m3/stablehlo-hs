@@ -1,26 +1,27 @@
+{-# LANGUAGE OverloadedStrings #-}
 module Main (main) where
+import MLIR
+
 import qualified Stablehlo.Dialect.Stablehlo as Stablehlo
 import qualified MLIR.Dialect.Func as Func
-import MLIR.IR
-import MLIR.BuiltinAttributes (stringAttr, typeAttr, attributeNull)
-import MLIR.BuiltinTypes (functionType, f32Type, rankedTensorType)
+
 
 main :: IO ()
-main = withContext $ do
+main = runContextM $ do
   loadDialect_ Func.dialect
   loadDialect_ Stablehlo.dialect
   m <- moduleOp $ do 
-    Func._FuncOp (stringAttr "main")
-            (typeAttr $ functionType [rankedTensorType [] f32Type attributeNull, rankedTensorType [] f32Type attributeNull] [rankedTensorType [] f32Type attributeNull])
+    Func._FuncOp "main"
+            (TypeAttr $ FunctionType [toAnyType $ RankedTensorType [12, 12] F32Type NullAttr, toAnyType $ RankedTensorType [12, 12] F32Type NullAttr] [toAnyType $ RankedTensorType [12, 12] F32Type NullAttr])
             Nothing Nothing Nothing $ do
-              bb0 <- addBlock [rankedTensorType [] f32Type attributeNull, rankedTensorType [] f32Type attributeNull]
-              defBlock bb0 $ do
-                a0 <- blkArg 0
-                a1 <- blkArg 1
-                _0 <- Stablehlo._AddOp a0 a1 (rankedTensorType [] f32Type attributeNull)
+              bb0 <- blockGet [toAnyType $ RankedTensorType [12, 12] F32Type NullAttr, toAnyType $ RankedTensorType [12, 12] F32Type NullAttr]
+              blockDef bb0 $ do
+                a0 <- blockArg 0
+                a1 <- blockArg 1
+                _0 <- Stablehlo._AddOp a0 a1 (toAnyType $ RankedTensorType [12, 12] F32Type NullAttr)
                 Func._ReturnOp [_0]
               return ()
     return ()
-  dumpModule m
+  moduleDump m
   moduleDestroy m
   return ()
