@@ -21,6 +21,7 @@ import MLIR.IR
 
 import Foreign
 import Foreign.C
+import Control.Exception (assert)
 
 #include<Dialect/Stablehlo/attributes.cpp>
 data CustomCallApiVersionAttr = StatusReturningUnified | StatusReturning | Unspecified | Original
@@ -83,8 +84,25 @@ foreign import ccall unsafe "stablehloGatherDimensionNumbersGet"
   gatherDimensionNumbersGet :: Context -> LenArray(offset dims) -> LenArray(collapsed slice dims) -> LenArray(start index map) -> Int64 -> IO Attribute
 
 
-data DotDimensionNumbersAttr
+data DotDimensionNumbersAttr = DotDimensionNumbersAttr { getBatchingDims :: [(Int64, Int64)], getContractingDims :: [(Int64, Int64)] }
 instance AttrGet DotDimensionNumbersAttr where
+  attrGet attr c = assert constraints $ do 
+    withArray lhsBatch $ \ lhsBatch' -> 
+      withArray rhsBatch $ \ rhsBatch' -> 
+        withArray lhsContr $ \ lhsContr' ->
+          withArray rhsContr $ \ rhsContr' -> do
+            putStrLn ("numBatch is: " ++ show numBatchDims)
+            dotDimensionNumbersGet c numBatchDims lhsBatch' numBatchDims rhsBatch' numContrDims lhsContr' numContrDims rhsContr'
+    where (lhsBatch, rhsBatch) = unzip $ getBatchingDims attr 
+          (lhsContr, rhsContr) = unzip $ getContractingDims attr
+          isUnique :: Eq a => [a] -> Bool
+          isUnique []    = True 
+          isUnique (a:as) = (a `notElem` as) && isUnique as
+          numBatchDims = fromIntegral $ length $ getBatchingDims attr 
+          numContrDims = fromIntegral $ length $ getContractingDims attr 
+          constraints = isUnique (lhsBatch ++ lhsContr) && isUnique (rhsBatch ++ rhsContr)
+          
+  
 foreign import ccall unsafe "stablehloDotDimensionNumbersGet"
   dotDimensionNumbersGet :: Context -> LenArray(lhs batching) -> LenArray(rhs batching) -> LenArray(lhs contracting) -> LenArray(rhs contracting) -> IO Attribute
 

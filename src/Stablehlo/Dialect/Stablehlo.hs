@@ -8,3 +8,4 @@ import MLIR.C.IR (DialectHandle(..))
 
 foreign import ccall unsafe "mlirGetDialectHandle__stablehlo__" 
   dialect :: DialectHandle
+

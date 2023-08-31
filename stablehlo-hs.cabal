@@ -122,12 +122,8 @@ library
 
     cxx-sources:      cbits/Dialect/Stablehlo/attributes.cpp
     
-    include-dirs:     /home/cha0s/stablehlo
-                      /home/cha0s/stablehlo/build
-                      cpphs/
+    include-dirs:     cpphs/
                       cbits/
-
-    extra-lib-dirs:   /home/cha0s/stablehlo/build/lib
 
 
 test-suite stablehlo-test
